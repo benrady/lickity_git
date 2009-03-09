@@ -1,0 +1,11 @@
+What Is....
+
+Lickity_git is a Distributed Continuous Integration system for Git. It automatically builds and changes committed to your local repository and, if successful, pushes them to the remote repo.
+
+INSTALLATION
+
+Simply add the lickity_git directory to your system path, and call 'lickity' from the root of any git repository. Lickity_git will monitor that repo for changes, run builds, and push as necessary.
+
+LICENSE
+
+Lickity_git is written by Ben Rady (http://www.benrady.com) and is licensed for your use under the terms of the GNU Public License v2 (http://www.gnu.org/licenses/gpl-2.0.html). 
