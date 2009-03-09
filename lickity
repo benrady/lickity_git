@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+#Write a pid file so that we can start lickity from a git hook without worrying if it's already running
+REMOTE_REPO=`git remote -v | sed 's/origin//'`
+echo "Publishing to remote repo: $REMOTE_REPO"
+
+while [ true ]
+do
+  # Wait a second
+  sleep 1
+  
+  # Look for a commit file
+  if [ -e "lickity.commit" ]; then
+    echo "Processing commit"
+    git pull
+    
+    # clone the repo
+    git clone . .lickity
+    
+    # run a build
+    cd .lickity
+    echo "Building..."
+    mvn clean install > lickity.commit
+    
+    if [ "$?" -eq "0" ]; then
+      git push $REMOTE_REPO master
+      cd ..
+      git pull
+      rm lickity.commit
+      growl "Changes pushed"
+    else
+      cd ..
+      growl "Build failed"
+      mv lickity.commit lickity.build_failure
+    fi      
+    rm -rf .lickity
+  fi
+done
