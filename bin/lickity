@@ -14,6 +14,7 @@ fi
 
 REMOTE_REPO=`git remote -v | sed 's/origin//'`
 echo "Publishing to remote repo: $REMOTE_REPO"
+MONITORED_REPO=`pwd`
 
 while [ true ]
 do
@@ -25,11 +26,15 @@ do
     echo "Processing commit"
     git pull
     
-    # clone the repo
-    git clone . .lickity
+    # clone the repo if necessary
+    if [ ! -d ".lickity" ]; then
+      git clone . .lickity
+    fi
     
-    # run a build
+    # Pull changes to cloned repo
     cd .lickity
+    git clean -df
+    git pull
     
     # If a pom is present, run a maven build
     # FIXME Ant, rake support?
@@ -47,6 +52,5 @@ do
     cd ..
     git pull 
     rm lickity.commit
-    rm -rf .lickity
   fi
 done
