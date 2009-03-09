@@ -31,19 +31,17 @@ do
     # run a build
     cd .lickity
     echo "Building..."
-    mvn clean install > lickity.commit
+    mvn clean install
     
     if [ "$?" -eq "0" ]; then
       git push $REMOTE_REPO master
-      cd ..
-      git pull
-      rm lickity.commit
       growl "Changes pushed"
     else
-      cd ..
       growl "Build failed"
-      mv lickity.commit lickity.build_failure
-    fi      
+    fi     
+    cd ..
+    git pull 
+    rm lickity.commit
     rm -rf .lickity
   fi
 done
