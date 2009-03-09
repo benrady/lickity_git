@@ -30,15 +30,20 @@ do
     
     # run a build
     cd .lickity
-    echo "Building..."
-    mvn clean install
     
-    if [ "$?" -eq "0" ]; then
-      git push $REMOTE_REPO master
-      growl "Changes pushed"
-    else
-      growl "Build failed"
-    fi     
+    # If a pom is present, run a maven build
+    # FIXME Ant, rake support?
+    if [ -e "pom.xml" ]; then
+      echo "Building..."
+      mvn clean install
+    
+      if [ "$?" -eq "0" ]; then
+        git push $REMOTE_REPO master
+        growl "Changes pushed"
+      else
+        growl "Build failed"
+      fi     
+    fi
     cd ..
     git pull 
     rm lickity.commit
