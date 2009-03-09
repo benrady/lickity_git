@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
-#Write a pid file so that we can start lickity from a git hook without worrying if it's already running
+#Check to see if commit hook is installed
+COMMIT_HOOK_FILE=.git/hooks/post-commit
+install_flag=`grep lickity .git/hooks/post-commit | wc -l`
+if [ "$install_flag" -eq "0" ]; then
+  echo "" >> .git/hooks/post-commit
+  echo "# lickity_git commit hook" >> $COMMIT_HOOK_FILE
+  echo "touch lickity.commit" >> $COMMIT_HOOK_FILE
+  echo "Added commit hook to $COMMIT_HOOK_FILE" 
+fi
+
+# FIMXE Write a pid file so that we can start lickity from a git hook without worrying if it's already running
+
 REMOTE_REPO=`git remote -v | sed 's/origin//'`
 echo "Publishing to remote repo: $REMOTE_REPO"
 
